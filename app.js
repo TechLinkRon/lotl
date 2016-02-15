@@ -177,6 +177,8 @@ app.use('/public/fonts', express.static(__dirname + '/node_modules/bootstrap/dis
 app.use('/public/css/fonts', express.static(__dirname + '/node_modules/bootstrap/dist/fonts'));
 
 
+
+
 app.get('*', function (req, res) {
 	res.send('Bad Route');
 	res.end();
