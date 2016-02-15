@@ -191,7 +191,7 @@ db.sequelize.sync().then(function () {
 		var host = server.address().address;
 		var port = server.address().port;
 		
-		console.log('LawOfTheLamb app listening at http://%s:%s', host, port);
+		console.log('LawOfTheLamb app listening at http://%s:%s!', host, port);
 	});
 });
 
