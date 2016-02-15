@@ -1,0 +1,96 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="/public/js/jquery.js"></script>
+    <% include ../partials/headSection %>
+</head>
+<body style="background-color: #B1C8DC;">
+    <div class="container">
+
+
+        <div class="col-sm-9">
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills" role="tablist" id="mytabs">
+                <li role="presentation"><a href="#client-info" aria-controls="client-info" role="tab" data-toggle="tab">Client Info</a></li>
+                <li role="presentation" class="active"><a href="#chrono" aria-controls="chrono" role="tab" data-toggle="tab">Chrono</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+            </ul>
+
+            <div class="tab-content" style="padding-top: 20px;">
+                <div role="tabpanel" class="tab-pane" id="client-info"><div style="height: 200px; width: 200px;"></div></div>
+
+                <!--  BEGIN CHRONO TAB -->
+                <div role="tabpanel" class="tab-pane" id="chrono">
+
+
+                    <!-- Previous messages -->
+                    <div class="row" style="margin-top: 15px; height: 600px; overflow-y: scroll;">
+                        <div class="col-sm-12" id="chrono_container" style="text-align:center;">
+                            <div id="chrono_chunk1">
+                            </div>
+                            <button type="button" class="btn btn-success" id="loadMessagesButton">Load more...</button>
+                        </div>
+                    </div>
+                </div>
+                <!--  END CHRONO TAB -->
+
+
+                <div role="tabpanel" class="tab-pane" id="messages"><div style="height: 200px; width: 200px;"></div></div>
+                <div role="tabpanel" class="tab-pane" id="settings"><div style="height: 200px; width: 200px;"></div></div>
+
+            </div> <!-- End tab-content-->
+
+        </div>
+    </div>
+
+
+    <script src="/public/js/jquery-ui.min.js"></script>
+    <script src="/public/js/bootstrap.js"></script>
+    <script src="/public/js/bootstrap-notify.js"></script>
+    <script src="/public/js/bootstrap-treeview.min.js"></script>
+    <script src="/public/js/ckeditor.js"></script>
+    <script src="/public/js/adapters/jquery.js"></script>
+    <script src="/public/js/typeaheadjs/typeahead.bundle.min.js"></script>
+    <% include ../partials/noteEditor.js.ejs %>
+    <% include ../partials/ajaxUpdater.js.ejs %>
+    <% include ../partials/noteEditor.js.ejs %>
+    <script type="text/javascript">
+
+        // ID of client current active
+        var currentClientViewID = <%= clientInfo.clientId %>;
+        var userID = <%= userID %>;
+        $('#myTabs li a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+
+
+        var firstMessage = 0;
+        var chunkSize = 10;
+        var chunkCount = 1;
+
+ 
+        $( '#loadMessagesButton' ).on('click', function() {
+
+            var currentDiv = '#chrono_chunk' + chunkCount;
+            $(currentDiv).load('/api/get_chronos/94/' + firstMessage + '/' + chunkSize);
+
+            firstMessage += chunkSize;
+            chunkCount++;
+
+            var newDiv = document.createElement('div');
+            newDiv.id = 'chrono_chunk' + chunkCount;
+            $('#chrono_container').append(newDiv).append(this);
+            
+
+        });
+
+        $( document ).ready( function () {
+            $( '#loadMessagesButton' ).click();
+        })
+
+    </script>
+</body>
+</html>

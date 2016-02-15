@@ -1,0 +1,67 @@
+﻿<script type="text/javascript">
+
+    function escapeHtml(str) {
+        var div = document.createElement('div');
+        div.appendChild(document.createTextNode(str));
+        return div.innerHTML;
+    };
+
+
+    function updateDbAjax(dirtyControl) {
+
+        //var theEditor = $(dirtyControlId).ckeditor().editor;
+
+        if (dirtyControl.checkDirty()) {
+            dirtyControl.resetDirty();
+
+
+
+
+
+
+            var data = dirtyControl.getData();
+            data = escapeHtml(data);
+            data = data.replace(/[\r\n]/g, '');
+
+                var theJson = {
+                    clientId: currentClientViewID,
+                    message: data,
+                    messageField: dirtyControl.element.getId()    //id of orig element = database field in clientTable
+                };
+
+                $.ajax({
+                    type: 'POST', // define the type of HTTP verb we want to use
+                    url: '/api/save_field', // the url where we want to POST
+                    data: JSON.stringify(theJson),
+                    contentType: 'application/json; charset=UTF-8',
+                    dataType: 'json', // what type of data do we expect back from the server
+                    encode: true,
+                    success: function (res) {
+                        var ret = $.parseJSON(JSON.stringify(res));
+
+                        if (ret.message === "OK") {
+                            $.notify(
+                                {
+                                    message: dirtyControl.container.getParent().$.getElementsByTagName('h3')[0].textContent + ' saved'
+                                },
+                                {
+                                    //element: '#' + dirtyControl.container.$.parentElement.parentElement.id,
+                                    allow_dismiss: false,
+                                    placement: {
+                                        from: "bottom",
+                                        align: "right"
+                                    },
+                                    animate: {  
+                                        enter: 'animated fadeInUp',
+                                        exit: 'animated fadeOutDown'
+                                    },
+                                    delay: 3000
+                                });
+                        }
+                    }
+                });
+            }
+    };
+
+
+</script>

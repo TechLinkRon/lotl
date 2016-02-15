@@ -1,0 +1,100 @@
+ <div role="tabpanel" class="tab-pane fade" id="files">
+
+    <style>
+
+        h1 {
+            font-size: 1.8em;
+        }
+
+        .fileTree {
+            overflow: auto;
+            min-height: 100px;
+			font-weight: bold;
+			font-size: 1.2em;
+        }
+    </style>
+    <!-- Button trigger modal -->
+    <button type="button" class="btn btn-primary btn-lg" data-toggle="modal" data-target="#letterModal">
+      New Letter
+    </button>
+
+    
+    <div id="ajax" class="fileTree"></div>
+
+    <script>
+
+        // ajax demo
+        function populateTree() {
+            $('#ajax').jstree({
+                "plugins": ["wholerow"],
+                'core': {
+                    'data': {
+                        'url': function (node) {
+                            
+                            var nodeID = '';
+                            if(node.id === '#') {
+                                nodeID = 'root';
+                            } else {
+                                nodeID = node.id;
+                            }
+                            return '/api/fs/' + nodeID + '/' + currentClientViewID;
+                        },
+                        'dataType': 'json' // needed only if you do not supply JSON headers
+                    },
+					'themes': {
+						'dots': 'true'
+					}
+                }
+            }).on('select_node.jstree', function (e, data) {
+
+                if (data.node.a_attr.nodeType === 'file')
+                    window.open(data.node.a_attr.nodePath);
+					
+            }).on('open_node.jstree', function (e, data) {
+
+				var parentNode = data.instance.get_node(data.node.parent);
+				var siblingNodes = parentNode.children;
+				siblingNodes.forEach(function(siblingNodeID) {
+				
+					if(siblingNodeID !== data.node.id) {
+					var siblingNode = data.instance.get_node(siblingNodeID);
+					data.instance.close_node(siblingNode); 
+					};
+				});
+				
+			});
+		};
+
+        
+
+    
+
+        
+        $('#letterModal').on('show.bs.modal', function (e) {
+            
+            
+    var letterEditorConfig = {
+        toolbar: [
+            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+		    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll'] },
+
+		    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+		    { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight'] }
+        ],
+        enterMode: CKEDITOR.ENTER_BR,
+        height: '650px',
+        extraPlugins: 'ajax',
+        allowedContent: true
+    };
+            var theLetterEditor = $('#newLetterTextarea').ckeditor(letterEditorConfig)
+                .on('instanceReady.ckeditor', function (e) {
+                    theLetterEditor.editor.setData(CKEDITOR.ajax.load('/public/templates/letter.template.html'));
+                });
+            //var theEditor = theCKEditor.editor;
+            
+            //var theLetterEditor = $('#newLetterTextarea').ckeditor({enterMode: CKEDITOR.ENTER_BR}).editor;        
+            
+        });
+		
+    </script>
+</div>

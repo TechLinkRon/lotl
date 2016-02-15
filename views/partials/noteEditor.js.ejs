@@ -1,0 +1,122 @@
+<script type="text/javascript">
+
+    //Message check-if-changed interval (ms)
+    var set_delay = 5000;
+
+    // Unique ID for all iterations of this message. Will be assigned a non-zero value
+    // by the server when this message is saved the first time.
+    var currentMessageID = 0;
+
+    var saveIfChanged = function () {
+        if (theEditor.checkDirty()) {
+            theEditor.resetDirty();
+
+            var data = $('#new-note').val();
+
+            var theJson = {
+                message: data,
+                messageID: currentMessageID,
+                clientID: currentClientViewID
+            };
+
+            $.ajax({
+                type: 'POST', // define the type of HTTP verb we want to use
+                url: '/api/save_message', // the url where we want to POST
+                data: JSON.stringify(theJson),
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json', // what type of data do we expect back from the server
+                encode: true,
+                success: function (res) {
+                    currentMessageID = res.message;
+                    var ret = $.parseJSON(JSON.stringify(res));
+
+                    pinkness = false;
+                    $('#new-note-heading').animate(
+                        {
+                            'background-color': '#d9edf7'
+                        }, 1000);
+                    $('#messageNotSavedFlag').animate(
+                        {
+                            'opacity': '0'
+                        }, 1000);
+                    $('#messageSavedFlag').animate(
+                        {
+                            'opacity': '1'
+                        }, 1000);
+
+                    //$.notify(
+                    //    {
+                    //        message: 'Note saved'
+                    //    },
+                    //    {
+                    //        allow_dismiss: false,
+                    //        placement: {
+                    //            from: "top",
+                    //            align: "right"
+                    //        },
+                    //        animate: {
+                    //            enter: 'animated fadeInDown',
+                    //            exit: 'animated fadeOutUp'
+                    //        },
+                    //        delay: 3000
+                    //    });
+                    //$.notify({message: 'shit' },{element : $('#new-note-heading')[0], animate: {enter: 'animated fadeIn'}})
+
+                }
+            });
+        }
+        //setTimeout(saveIfChanged, set_delay)
+    };
+
+    var chronoEditorConfig = {
+        toolbar: [
+            { name: 'clipboard', items: ['Cut', 'Copy', 'Paste', 'PasteText', 'PasteFromWord', '-', 'Undo', 'Redo'] },
+		    { name: 'editing', items: ['Find', 'Replace', '-', 'SelectAll'] },
+
+		    { name: 'basicstyles', items: ['Bold', 'Italic', 'Underline', 'Strike', '-', 'RemoveFormat'] },
+		    { name: 'paragraph', items: ['NumberedList', 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter', 'JustifyRight'] }
+        ],
+        enterMode: CKEDITOR.ENTER_BR
+    };
+    
+    //var theEditor = $('#new-note').ckeditor(chronoEditorConfig).editor;
+    var theEditor = $('#new-note').ckeditor({enterMode: CKEDITOR.ENTER_BR}).editor;
+
+    function resetInterval(evt) {
+        clearTimeout(timer);
+        console.log("restarted interval");
+        timer = setTimeout(function () {
+            saveIfChanged();
+        }, 2000);
+    }
+
+
+
+    // initial call
+    $(window).on('instanceReady.ckeditor', function () {
+
+        theEditor.on('change', function (evt) {
+            if (!pinkness) {
+                pinkness = true;
+                $('#new-note-heading').animate(
+                    {
+                        'background-color': '#55B4E4'
+                    }, 1000);
+                $('#messageNotSavedFlag').animate(
+                    {
+                        'opacity': '1'
+                    }, 1000);
+                $('#messageSavedFlag').animate(
+                    {
+                        'opacity': '0'
+                    }, 1000);
+            }
+            resetInterval();
+        });
+    });
+   
+
+    var timer;
+    var pinkness = false;
+
+</script>

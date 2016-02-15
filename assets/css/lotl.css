@@ -1,0 +1,62 @@
+@media (min-width: 992px) {
+  .container {
+    /* width: 970px; */
+    width: 100%;
+  }
+}
+
+
+
+.lotl_div {
+    /*background-color: #d9edf7;
+    padding: 10px 5px;
+    border-color: #70B1CE;
+    border-width: 4px;
+    border-style: groove;*/
+    line-height: normal;
+    background-color: lightskyblue;
+}
+
+.lotl_div p {
+
+    margin: 0px;
+
+}
+
+.tab-pane {
+
+    background-color: lightblue;
+    border-style: solid;
+    border-width: 3px;
+    border-radius: 10px;
+    border-color: steelblue;
+    padding: 10px;
+	overflow-y: auto;
+}
+
+.tab-panel {
+	
+	    padding: 10px 25px;
+}
+
+.nav-tabs-justified > .active > a,
+.nav-tabs-justified > .active > a:hover,
+.nav-tabs-justified > .active > a:focus {
+  border: 1px none #ddd;
+}
+
+  .nav-tabs.nav-justified > li > a {
+    border-bottom: 1px none #ddd;
+    border-radius: 4px 4px 0 0;
+  }
+  .nav-tabs.nav-justified a,
+  .nav-tabs.nav-justified a:hover,
+  .nav-tabs.nav-justified a:focus {
+    font-size: 18px;
+  }
+
+  .nav-tabs.nav-justified > .active > a,
+  .nav-tabs.nav-justified > .active > a:hover,
+  .nav-tabs.nav-justified > .active > a:focus {
+    border-bottom: 1px none;
+  }

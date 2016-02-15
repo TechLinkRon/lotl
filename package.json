@@ -1,0 +1,23 @@
+{
+  "name": "lawofthelamb",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "async": "^1.4.2",
+    "body-parser": "^1.14.1",
+    "bootstrap": "^3.3.5",
+    "client-sessions": "^0.7.0",
+    "dblite": "^0.7.6",
+    "ejs": "^2.3.4",
+    "express": "^4.13.3",
+    "moment": "^2.10.6",
+    "sequelize": "^3.16.0",
+    "sqlite3": "^3.1.0"
+  }
+}

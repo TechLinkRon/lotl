@@ -1,0 +1,16 @@
+<div class="list-group">
+    <span class="list-group-item list-group-item-info text-center" style="font-weight: bold;">
+        Recent Clients
+        <span class="badge"><%= userRecentClients.length %></span>
+    </span>
+
+    <% if(userRecentClients.length != 0) {
+            userRecentClients.forEach(function(row) {   %>
+                <a href="/home/<%= userID %>/<%= row.clientID %>" class="list-group-item list-group-item-success text-center" style="font-weight: bold;"> <%= row.clientName %>  </a>
+            <% }); 
+        }
+        else
+        { %>
+                <a href="#" class="list-group-item list-group-item-success text-center"> No recently viewed clients  </a>
+        <% } %>
+</div>

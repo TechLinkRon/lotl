@@ -1,0 +1,63 @@
+<XMLDiagram>
+  <TDBADiagramController Locked="0">
+    <Elements>
+      <TDBADiagramObject id="2" propertiesclass="TDiagramMetaTableProperties" objectname="clientTable">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="480" top="40" width="200" height="108"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="3" propertiesclass="TDiagramMetaTableProperties" objectname="userTable">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="40" top="40" width="200" height="108"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="1" propertiesclass="TDiagramMetaTableProperties" objectname="userMessageLists">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="150" top="360" width="200" height="66"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="4" propertiesclass="TDiagramMetaTableProperties" objectname="messageListItems">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="290" top="590" width="200" height="80"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="5" propertiesclass="TDiagramMetaTableProperties" objectname="clientMessageLists">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="390" top="360" width="200" height="66"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="6" propertiesclass="TDiagramMetaTableProperties" objectname="listMembership">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="290" top="480" width="200" height="49"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="7" propertiesclass="TDiagramMetaTableProperties" objectname="taskList">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="40" top="480" width="200" height="66"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+      <TDBADiagramObject id="8" propertiesclass="TDiagramMetaTableProperties" objectname="recentClientViews">
+        <TDiagramMetaTableProperties>
+          <Glyph>
+            <Geometry left="260" top="200" width="200" height="66"/>
+          </Glyph>
+        </TDiagramMetaTableProperties>
+      </TDBADiagramObject>
+    </Elements>
+    <Surface zoom="125" scrollx="0" scrolly="0"/>
+  </TDBADiagramController>
+</XMLDiagram>

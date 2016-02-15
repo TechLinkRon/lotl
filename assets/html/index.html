@@ -1,0 +1,141 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link href="/public/css/spacelab/bootstrap.css" rel="stylesheet">
+    <link href="/public/css/jquery-ui.min.css" rel="stylesheet">
+    <!-- <link href="./css/bootstrap-treeview.css" rel="stylesheet"> -->
+  </head>
+  <body>
+  	<div class="container">
+    	<h1>Bootstrap Tree View</h1>
+      <br>
+
+      <div class="row">
+        <hr>
+        <h2>Data</h2>
+        <div class="col-sm-8">
+          <h2>JSON Data</h2>
+          <div id="treeview12" class=""></div>
+        </div>
+        <div class="col-sm-4">
+          <h2></h2>
+          <div id="treeview13" class=""></div>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-sm-10" id="source_container">
+          <textarea class="form-control" name="source" id="source"></textarea>
+        </div>
+      </div>
+      <div class="row" style="height: 2em;">
+        <div class="col-sm-8">
+          &nbsp;
+        </div>
+        <div class="col-sm-2">
+           <div class="progress-bar progress-bar-striped active" role="progressbar" aria-valuenow="100" aria-valuemin="0" 
+                      aria-valuemax="100" style="display: none; width: 100%;" id="savingBar">
+              <span>Saving...</span>
+            </div>
+        </div>
+      </div>
+
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+    </div>
+    <script src="/public/js/jquery.js"></script>
+    <script src="/public/js/jquery-ui.min.js"></script>
+    <script src="/public/js/notify.min.js"></script>
+  	<script src="/public/js/bootstrap-treeview.min.js"></script>
+    <script src="/public/js/ckeditor.js"></script>
+    <script src="/public/js/adapters/jquery.js"></script>
+  	<script type="text/javascript">
+
+  var set_delay = 5000;
+ 
+var callout = function () {
+  if(theEditor.checkDirty()) {
+    theEditor.resetDirty();
+    
+    // show 'saving' animation
+    //$('#savingBar').show(400, 'linear');
+    $('#source_container').notify("Saving...", {
+                                                position: "right bottom",
+                                                className: "info",
+                                                showDuration: 300,
+                                                hideDuration: 300,
+                                                showAnimation: "fadeIn",
+                                                hideAnimation: "fadeOut",
+                                                autoHide: false,
+                                                arrowShow: false,
+                                                gap: 0
+                                                });
+    
+    var data = $('#source').val();
+    var date = new Date();
+    
+    var theJson = 
+      {
+        message: data,
+        timestamp: date
+      }
+    ;
+    
+      $.ajax({
+      type        : 'POST', // define the type of HTTP verb we want to use
+      url         : '/api/save_message', // the url where we want to POST
+      data        : JSON.stringify(theJson),
+      contentType : 'application/json; charset=UTF-8',
+      dataType    : 'json', // what type of data do we expect back from the server
+      encode      : true,
+        success		: function(res){
+                  var ret = $.parseJSON(JSON.stringify(res));
+
+                  // hide 'saving' animation
+                  //$('#savingBar').hide(400, 'linear');
+                  $('#source_container').parent().children('.notifyjs-wrapper').trigger('notify-hide');
+              }
+    });
+  }      
+  setTimeout(callout, set_delay)
+};
+
+      
+var theEditor = $('#source').ckeditor({ extraPlugins: 'notification' }).editor;
+
+ // initial call
+ $(window).on('instanceReady.ckeditor', function () {
+callout();
+ });
+      
+  		$(function() {
+
+					 $.ajax({
+							type        : 'POST', // define the type of HTTP verb we want to use
+							url         : '/api/fs', // the url where we want to POST
+							//data        : JSON.stringify(formData), // our data object
+							contentType : 'application/json; charset=UTF-8',
+							dataType    : 'json', // what type of data do we expect back from the server
+							encode      : true,
+							success		: function(res){
+												var ret = $.parseJSON(JSON.stringify(res));
+												
+
+                        var $tree = $('#treeview12').treeview({
+                          color: "#428bca",
+                          expandIcon: "glyphicon glyphicon-folder-close",
+                          collapseIcon: "glyphicon glyphicon-folder-open",
+                          //nodeIcon: "glyphicon glyphicon-file",
+                          showTags: true,
+                          data: ret
+                        });
+											}
+						});
+        
+
+        
+  		});
+  	</script>
+  </body>
+</html>

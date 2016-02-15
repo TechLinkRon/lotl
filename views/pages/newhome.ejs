@@ -1,0 +1,320 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title></title>
+    <script src="/public/js/jquery.js"></script>
+    <% include ../partials/headSection %>
+</head>
+<body style="background-color: #B1C8DC;">
+    <div class="container">
+        <header>
+            <% include ../partials/header %>
+        </header>
+
+        <div class="col-sm-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title">Client: <%= clientInfo.clientName %></h3>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-6">
+            <div class="panel panel-primary">
+                <div class="panel-heading">
+                    <h3 class="panel-title" style="text-align: right;">User: <%= userInfo.firstName %> <%= userInfo.lastName %></h3>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="col-sm-9">
+            <!-- Nav tabs -->
+            <ul class="nav nav-pills" role="tablist" id="mytabs">
+                <li role="presentation" class="active"><a href="#client-info" aria-controls="client-info" role="tab" data-toggle="tab">Client Info</a></li>
+                <li role="presentation"><a href="#chrono" aria-controls="chrono" role="tab" data-toggle="tab">Chrono</a></li>
+                <li role="presentation"><a href="#messages" aria-controls="messages" role="tab" data-toggle="tab">Messages</a></li>
+                <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
+            </ul>
+
+
+            <div class="tab-content" style="padding-top: 20px;">
+
+                <div role="tabpanel" class="tab-pane active" id="client-info">
+                    <div class="col-sm-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Phone Information</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientPhoneNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Health Insurance Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientHealthInsuranceNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Liens Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientLiensNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Type of Case Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientTypeOfCaseNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">60L Code Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="client60LCodeNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Case Style and Atty Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientCaseStyleAndAttorneysNotes"></div>
+                        </div>
+                    </div>
+                    <div class="col-sm-12">
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Workers Comp Carrier</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientWorkersCompCarrierNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">DOA</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientDOANotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Last Payment Date Info</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientLastPaymentDateNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Disability Insurance Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientDisabilityInsuranceNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">No Fault Carrier Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientNoFaultCarrierNotes"></div>
+                        </div>
+                        <div class="panel panel-info">
+                            <div class="panel-heading">
+                                <h3 class="panel-title">Fault Carrier Notes</h3>
+                            </div>
+                            <div class="lotl_div panel-body" contenteditable="true" id="clientFaultCarrierNotes"></div>
+                        </div>
+                    </div>
+                </div> 
+                <!--  END CLIENT INFO TAB -->
+
+
+                <!--  BEGIN CHRONO TAB -->
+                <% include ../partials/chronosTab %>
+                <!--  END CHRONO TAB -->
+
+
+                <div role="tabpanel" class="tab-pane" id="messages"><div style="height: 200px; width: 200px;"></div></div>
+                <div role="tabpanel" class="tab-pane" id="settings"><div style="height: 200px; width: 200px;"></div></div>
+
+                    </div> <!-- End tab-content-->
+
+        </div>
+
+
+        <div class="col-sm-3">
+            <div>
+                <!-- CLIENT SEARCH  -->
+                <div id="clientSearch" style="margin-bottom: 10px; width: 90%;">
+                    <input class="typeahead" type="text" placeholder="Enter client name...">
+                </div>
+            </div>
+            <!--  RECENT CLIENT VIEWS  -->
+            <div class="panel panel-primary">
+                <% include ../partials/recentClients %>
+            </div>
+        </div>
+
+    </div>
+    <script src="/public/js/jquery-ui.min.js"></script>
+    <script src="/public/js/bootstrap.js"></script>
+    <script src="/public/js/bootstrap-notify.js"></script>
+    <script src="/public/js/bootstrap-treeview.min.js"></script>
+    <script src="/public/js/ckeditor.js"></script>
+    <script src="/public/js/adapters/jquery.js"></script>
+    <script src="/public/js/typeaheadjs/typeahead.bundle.min.js"></script>
+    <% include ../partials/noteEditor.js.ejs %>
+    <% include ../partials/ajaxUpdater.js.ejs %>
+    <script type="text/javascript">
+
+        // ID of client current active
+        var currentClientViewID = <%= clientInfo.clientId %>;
+        var userID = <%= userID %>;
+
+        $('#myTabs li a').click(function (e) {
+            e.preventDefault()
+            $(this).tab('show')
+        })
+
+
+        // ******************* TypeAhead search **************************************
+        var engine = new Bloodhound({
+            queryTokenizer: Bloodhound.tokenizers.whitespace,
+            datumTokenizer: Bloodhound.tokenizers.whitespace,
+            remote: {
+                url: '/clientsearch/%QUERY',
+                wildcard: '%QUERY'
+            }
+        });
+
+        var aMatchCounter = true;
+        var clientSearchTypeahead = $('#clientSearch .typeahead');
+
+        clientSearchTypeahead.typeahead({
+            hint: true,
+            highlight: true,
+            minLength: 2
+        },
+        {
+            name: 'clients',
+            limit: 10,
+            source: engine,
+            display: function(aMatch) {
+                return aMatch.clientName;
+            },
+            templates: {
+                header: function () {
+                    aMatchCounter = true;
+                    var headerClassString = 'tt-suggestion-headerrow';
+                    return '<div class=\'' + headerClassString + '\'>Select a client</div>';
+                },
+                suggestion: function (aMatch) {
+                    aMatchCounter = !aMatchCounter;
+                    var rowClassString = 'tt-suggestion-evenrow';
+                    if (aMatchCounter) {
+                        rowClassString = 'tt-suggestion-oddrow';
+                    }
+                    return '<div class=\'' + rowClassString + '\'>' + aMatch.clientName + '</div>';
+                }
+
+            }
+        });
+
+        clientSearchTypeahead.on('typeahead:select', function (ev, suggestion) {
+
+            window.location.href = '/home/' + userID + '/' + suggestion.clientID;
+
+        });
+
+        // ******************* END TypeAhead search **************************************
+
+        function unescapeHtml(escapedStr) {
+            var div = document.createElement('div');
+            div.innerHTML = escapedStr;
+            //var child = div.childNodes[0];
+
+            if (div)
+                return $(div).html().replace(/&amp;/g,'&').replace(/&lt;/g,'<').replace(/&gt;/g,'>').replace(/&nbsp;/g,' ');
+            else
+                return '';
+
+            //return child ? child.nodeValue : '';
+        };
+
+        CKEDITOR.disableAutoInline = true;
+
+            var editorConfig = {
+                toolbar : [
+                { name: 'clipboard', items: [ 'Undo', 'Redo' ] },
+                { name: 'basicstyles', items: [ 'Bold', 'Italic', 'Underline', 'Strike' ] },
+                { name: 'paragraph', items: [ 'BulletedList', '-', 'Outdent', 'Indent', '-', 'JustifyLeft', 'JustifyCenter' ] }
+                ]
+            };
+
+            function insertDataAndActivateCkeditor(currentControl, currentContent) {
+
+                currentContent = unescapeHtml(currentContent.replace(/&amp;/g, '&'));
+                var thisEditor = CKEDITOR.inline(currentControl, editorConfig);
+                thisEditor.setData(currentContent);
+                $('#' + currentControl).hover( function () { 
+                        this.focus();
+                    },
+                    function () { 
+                    });
+                thisEditor.on( 'blur', function( e ) {
+                    updateDbAjax(e.sender);
+                } );
+                //$(thisEditor.element.$).css('background-color', 'white')
+            }
+
+            $( document ).ready(function() {
+                
+                var holder = '';
+                var thisControl = 'clientPhoneNotes';
+                holder = "<%= clientInfo.clientPhoneNotes %>";
+                insertDataAndActivateCkeditor(thisControl, holder);
+   
+                thisControl = 'clientHealthInsuranceNotes';
+                holder = "<%= clientInfo.clientHealthInsuranceNotes %>";
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                thisControl = 'clientWorkersCompCarrierNotes';
+                holder = "<%= clientInfo.clientWorkersCompCarrierNotes %>";
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = '<%= clientInfo.clientDOANotes %>';
+                thisControl = 'clientDOANotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientLiensNotes %>');
+                thisControl = 'clientLiensNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientLastPaymentDateNotes %>');
+                thisControl = 'clientLastPaymentDateNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientTypeOfCaseNotes %>');
+                thisControl = 'clientTypeOfCaseNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.client60LCodeNotes %>');
+                thisControl = 'client60LCodeNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientCaseStyleAndAttorneysNotes %>');
+                thisControl = 'clientCaseStyleAndAttorneysNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientDisabilityInsuranceNotes %>');
+                thisControl = 'clientDisabilityInsuranceNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientNoFaultCarrierNotes %>');
+                thisControl = 'clientNoFaultCarrierNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                holder = ('<%= clientInfo.clientFaultCarrierNotes %>');
+                thisControl = 'clientFaultCarrierNotes';
+                insertDataAndActivateCkeditor(thisControl, holder);
+
+                $('.lotl_div').animate(
+                    {
+                        'background-color': 'white'
+                    }, 3000);
+            });
+
+    </script>
+</body>
+</html>

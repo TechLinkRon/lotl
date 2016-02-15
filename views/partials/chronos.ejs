@@ -1,0 +1,15 @@
+﻿<div>
+    <!-- Previous messages -->
+    <% if(clientRecentMessages.length != 0) {
+    clientRecentMessages.forEach(function(theMessage) {   %>
+    <div class="panel panel-info" style="margin-bottom: 10px;">
+        <div class="panel-heading" style="text-align:center;">
+            <h3 class="panel-title"><%= theMessage.updatedAtFriendly %></h3>
+        </div>
+        <div class="panel-body">
+            <%= theMessage.currentVersionText %>
+        </div>
+    </div>
+    <% });
+    } %>
+</div>

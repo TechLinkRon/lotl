@@ -1,0 +1,17 @@
+[
+  {
+    "text": "Root node",
+    "children": [
+      {
+        "text": "Child node 1",
+        "children": true
+      },
+      {
+        "text": "Child node 2",
+        "a_attr": {
+          "bullshit": "/root/bullshit.txt"
+        }
+      }
+    ]
+  }
+]
