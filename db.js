@@ -6,7 +6,8 @@ var sequelize = new Sequelize(undefined, undefined, undefined, {
 
 var db = {};
 
-db.lotl = sequelize.import(__dirname + '/models/lotl.js');
+db.user = sequelize.import(__dirname + '/models/user.js');
+
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
 
@@ -87,6 +88,7 @@ db.clientTable = sequelize.define('clientTable', {
 // ***************************************************************
 // ****************  userTable  **********************************
 // ***************************************************************
+/*
 db.userTable = sequelize.define('userTable', {
 	userID: {
 		type: Sequelize.INTEGER,
@@ -114,6 +116,7 @@ db.userTable = sequelize.define('userTable', {
 	timestamps: false
 	
 });
+*/
 
 // ***************************************************************
 // ****************  clientMessageLists  *************************
@@ -283,8 +286,8 @@ db.recentClientViews = sequelize.define('recentClientViews', {
 	freezeTableName: true
 });
 
-db.recentClientViews.belongsTo(db.clientTable, { foreignKey: 'recentViewee' });
-db.recentClientViews.belongsTo(db.userTable, { foreignKey: 'recentViewer' });
+//db.recentClientViews.belongsTo(db.clientTable, { foreignKey: 'recentViewee' });
+//db.recentClientViews.belongsTo(db.userTable, { foreignKey: 'recentViewer' });
 
 
 

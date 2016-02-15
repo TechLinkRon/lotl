@@ -1,5 +1,6 @@
 var http = require('http');
 var fs = require('fs');
+var _=require('underscore');
 
 var express = require('express');
 var app = express();
@@ -126,6 +127,18 @@ app.get('/api/fs/:nodeID/:clientID', jsonParser, function (req, res) {
         res.json(theAnswer);
         res.end();
     });
+});
+
+app.post('/users', jsonParser, function (req, res) {
+    var body = _.pick(req.body, 'email', 'password');
+    
+    db.user.create(body).then(function (user) {
+        res.json(user.toJSON());
+        
+    }, function (e) {
+        res.status(400).json(e);
+    });
+    
 });
 
 //==========================================================================================================================
