@@ -1,6 +1,7 @@
 var http = require('http');
 var fs = require('fs');
 var _=require('underscore');
+var bcrypt = require('bcrypt');
 
 var express = require('express');
 var app = express();
@@ -140,6 +141,37 @@ app.post('/users', jsonParser, function (req, res) {
     });
     
 });
+
+
+app.post('/users/login', jsonParser, function (req, res) {
+    var body = _.pick(req.body, 'email', 'password');
+    
+    if((typeof body.email !== 'string') || (typeof body.password !== 'string')) {
+
+        return res.status(400).send();
+
+    } 
+
+    db.user.findOne({
+        where: {
+            email: body.email
+        }
+    }).then(function (user) {
+        
+        if(!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
+            return res.status(401).send();
+        } 
+        
+    
+        
+        res.json(user.toPublicJSON());
+        
+    }, function(e) {
+        res.status(500).send();
+    });
+
+});
+
 
 //==========================================================================================================================
 // DATABASE API Calls (uses lotl_api.js)
