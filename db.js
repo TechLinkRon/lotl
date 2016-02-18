@@ -286,8 +286,8 @@ db.recentClientViews = sequelize.define('recentClientViews', {
 	freezeTableName: true
 });
 
-//db.recentClientViews.belongsTo(db.clientTable, { foreignKey: 'recentViewee' });
-//db.recentClientViews.belongsTo(db.userTable, { foreignKey: 'recentViewer' });
+db.recentClientViews.belongsTo(db.clientTable, { foreignKey: 'recentViewee' });
+db.recentClientViews.belongsTo(db.user, { foreignKey: 'recentViewer' });
 
 
 

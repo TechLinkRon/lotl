@@ -350,7 +350,7 @@ exports.getUserInfo = function (targetUserId, callMeBack) {
 	
 	var userInfo = {};
 	
-	db.userTable.findById(targetUserId).then(function (userTableEntry) {
+	db.user.findById(targetUserId).then(function (userTableEntry) {
 		if (userTableEntry) {
 			userInfo.firstName = userTableEntry.firstName;
 			userInfo.lastName = userTableEntry.lastName;

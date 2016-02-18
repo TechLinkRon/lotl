@@ -146,28 +146,13 @@ app.post('/users', jsonParser, function (req, res) {
 app.post('/users/login', jsonParser, function (req, res) {
     var body = _.pick(req.body, 'email', 'password');
     
-    if((typeof body.email !== 'string') || (typeof body.password !== 'string')) {
-
-        return res.status(400).send();
-
-    } 
-
-    db.user.findOne({
-        where: {
-            email: body.email
-        }
-    }).then(function (user) {
+    db.user.authenticate(body).then(function(user) {
         
-        if(!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
-            return res.status(401).send();
-        } 
+        res.header('Auth', user.generateToken('authentication')).json(user.toPublicJSON());
         
-    
+    }, function () {
         
-        res.json(user.toPublicJSON());
-        
-    }, function(e) {
-        res.status(500).send();
+        res.status(401).send();
     });
 
 });
