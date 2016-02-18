@@ -1,6 +1,6 @@
 var bcrypt = require('bcrypt');
 var _ = require('underscore');
-var cryptjs = require('crypto-js');
+var cryptojs = require('crypto-js');
 var jwt = require('jsonwebtoken');
 
 module.exports = function (sequelize, DataTypes) {
@@ -10,7 +10,7 @@ module.exports = function (sequelize, DataTypes) {
 // ****************  userTable  **********************************
 // ***************************************************************
     
-return sequelize.define('user', {
+var user = sequelize.define('user', {
     
 	userID: {
 		type: DataTypes.INTEGER,
@@ -77,8 +77,8 @@ return sequelize.define('user', {
             }
             
             try {
-                var stringData = JSON.stringify({id: this.get('id'), type: type});
-                var encryptedData = cryptjs.AES.encrypt(stringData, 'abc123&^%').toString();
+                var stringData = JSON.stringify({id: this.get('userID'), type: type});
+                var encryptedData = cryptojs.AES.encrypt(stringData, 'abc123&^%').toString();
                 
                 var token = jwt.sign({
                     token: encryptedData
@@ -95,23 +95,60 @@ return sequelize.define('user', {
         authenticate: function(body) {
             return new Promise(function(resolve, reject) {
                  if((typeof body.email !== 'string') || (typeof body.password !== 'string')) {
-                    reject();
+                    console.log('--> ' + e);
+                     return reject();
                 } 
-                db.user.findOne({
+                user.findOne({
                     where: {
                         email: body.email
                     }
                 }).then(function (user) {
                     if(!user || !bcrypt.compareSync(body.password, user.get('password_hash'))) {
-                        reject();
+                        console.log('Bad password...');
+                        return reject();
                     } 
                     resolve(user);
                 }, function(e) {
-                    reject();
+                    console.log('--> Error from db.user.findOne');
+                    console.log('--> ' + e);
+                    return reject();
                 });
+            });
+        },
+        findByToken: function (token) {
+            
+            return new Promise(function(resolve, reject) {
+               
+                try {
+                    console.log('Trying to decode token...');
+                    var decodedJWT = jwt.verify(token, 'qwerty0998');
+                    var bytes = cryptojs.AES.decrypt(decodedJWT.token, 'abc123&^%');
+                    var tokenData = JSON.parse(bytes.toString(cryptojs.enc.Utf8));
+                    
+                    user.findById(tokenData.id).then(function (user) {
+                        
+                        if(user) {
+                            return resolve(user);
+                            
+                        } else {
+                            return reject();
+                        }
+                        
+                    }, function (e) {
+                        
+                        return reject();
+                        
+                    });
+                    
+                } catch (e) {
+                    console.log('Catching shit...');
+                    return reject();
+                }
+                
             });
         }
     }
 });
 
-}
+    return user;
+};

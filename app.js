@@ -1,21 +1,25 @@
 var http = require('http');
+var express = require('express');
+var bodyParser = require('body-parser');
+
 var fs = require('fs');
 var _=require('underscore');
 var bcrypt = require('bcrypt');
+var db = require('./db.js');
+var middleware = require('./middleware.js')(db);
 
-var express = require('express');
+
 var app = express();
 var routes = require('./routes/routes.js');
 var fs_apis = require('./lotl_files_api.js');
 
 var moment = require('moment');
 var path = require('path');
-var bodyParser = require('body-parser');
+
 var sqlite3 = require('sqlite3').verbose();
 var async = require('async');
 var session = require('client-sessions');
 
-db = require('./db.js');
 
 app.set('view engine', 'ejs');
 
@@ -148,10 +152,16 @@ app.post('/users/login', jsonParser, function (req, res) {
     
     db.user.authenticate(body).then(function(user) {
         
-        res.header('Auth', user.generateToken('authentication')).json(user.toPublicJSON());
+        var token = user.generateToken('authentication');
+        if(token) {
+            res.header('Auth', token).json(user.toPublicJSON());
+        } else {
+            res.status(401).send();
+        }
         
-    }, function () {
+    }, function (e) {
         
+        console.log(e);
         res.status(401).send();
     });
 
@@ -188,7 +198,7 @@ app.get('/api/get_recents_list', routes.get_recents_list_html);
 
 // Get partial list of messages from chrono
 //app.post('/api/get_chronos/:clientID/:firstChrono/:lastChrono', routes.get_chronos);
-app.get('/api/get_chronos/:clientID/:firstChrono/:chronoCount', routes.get_chronos);
+app.get('/api/get_chronos/:clientID/:firstChrono/:chronoCount', middleware.requireAuthentication, routes.get_chronos);
 
 
 //==========================================================================================================================
