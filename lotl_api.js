@@ -89,7 +89,7 @@ exports.saveField = function (req, res) {
 	var updateObject = {};
 	updateObject[desiredMessageField] = desiredMessage;
 
-	db.clientTable.update(
+	db.client.update(
 		updateObject,
 		{
 			where: {
@@ -257,7 +257,7 @@ exports.clientSearch = function (req, res) {
 	var clientSearchString = req.params.searchTerm;
 	var matchingClientNames = [];
 	
-	db.clientTable.findAll(
+	db.client.findAll(
 		{
 			attributes: ['clientId' , 'clientName'],
 			where: {
@@ -313,9 +313,9 @@ exports.getRecentClientViewsAPI = function (userID, callMeBack2) {
 			attributes: ['recentViewer' , 'recentViewee'],
 			include: [
 				{
-					model: db.clientTable,
+					model: db.client,
 					attributes: ['clientName'],
-					as: 'clientTable'
+					as: 'client'
 				}
 			],
 			where: { recentViewer: userID },
@@ -330,7 +330,7 @@ exports.getRecentClientViewsAPI = function (userID, callMeBack2) {
 			for (i = 0; i < recentClientViews.length; i++) {
 				
 				var answerObject = {
-					clientName: recentClientViews[i].clientTable.clientName,
+					clientName: recentClientViews[i].client.clientName,
 					clientID: recentClientViews[i].recentViewee
 				};
 				
@@ -553,9 +553,9 @@ exports.getClientInfo = function (targetClientId, callMeBack) {
 	
 	var clientInfo = {};
 	
-	db.clientTable.findById(targetClientId).then(function (clientTableEntry) {
-		if (clientTableEntry) {
-			clientInfo = clientTableEntry;
+	db.client.findById(targetClientId).then(function (clientEntry) {
+		if (clientEntry) {
+			clientInfo = clientEntry;
 		}
 		
 		clientInfo.clientPhoneNotes = clientInfo.clientPhoneNotes || "";
@@ -609,7 +609,7 @@ function doesClientExist(testClientID, callMeBack) {
     },
     function (clientID, callback){
       var db = new sqlite3.Database(dbConnectionString);
-      var theSQL = "SELECT * FROM clientTable WHERE clientID = $cID;";
+      var theSQL = "SELECT * FROM client WHERE clientID = $cID;";
     
       db.all(theSQL,
           {
@@ -678,7 +678,7 @@ function doesClientExist(testClientID, callMeBack) {
 //		[
 //			function (callback) {
 //				var db = new sqlite3.Database(dbConnectionString);
-//				var theSQL = "SELECT recentClientViews.recentViewee, clientTable.clientName FROM recentClientViews, clientTable WHERE recentClientViews.recentViewer = $cID AND recentClientViews.recentViewee = clientTable.clientID;";
+//				var theSQL = "SELECT recentClientViews.recentViewee, clientTable.clientName FROM recentClientViews, clientTable WHERE recentClientViews.recentViewer = $cID AND recentClientViews.recentViewee = client.clientID;";
 				
 //				db.all(theSQL, { $cID: testClientID	},
 //					function (err, rows) {

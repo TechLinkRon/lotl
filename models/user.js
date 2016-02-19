@@ -141,13 +141,17 @@ var user = sequelize.define('user', {
                     });
                     
                 } catch (e) {
-                    console.log('Catching shit...');
+                    console.log('Catching shit...\r\n' + e.toString());
                     return reject();
                 }
                 
             });
         }
     }
+},
+{
+	freezeTableName: true
+	
 });
 
     return user;

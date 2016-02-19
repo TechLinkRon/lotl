@@ -1,11 +1,11 @@
-﻿var Sequelize = require('sequelize');
+var Sequelize = require('sequelize');
 var sequelize = new Sequelize(undefined, undefined, undefined, {
 	'dialect': 'sqlite',
 	'storage': 'db/testdb.sqlite'
 });
 
 
-var clientTable = sequelize.define('clientTable', {
+var client = sequelize.define('client', {
 	clientId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,

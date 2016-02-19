@@ -6,83 +6,89 @@ var sequelize = new Sequelize(undefined, undefined, undefined, {
 
 var db = {};
 
-db.user = sequelize.import(__dirname + '/models/user.js');
+
 
 db.sequelize = sequelize;
 db.Sequelize = Sequelize;
+db.user = sequelize.import(__dirname + '/models/user.js');
+db.client = sequelize.import(__dirname + '/models/client.js');
+db.token = sequelize.import(__dirname + '/models/token.js');
+
 
 // ***************************************************************
 // ****************  clientTable  ********************************
-// ***************************************************************
-
+// ************************************************************
+/*
 db.clientTable = sequelize.define('clientTable', {
-	clientId: {
-		type: Sequelize.INTEGER,
-		primaryKey: true,
-		autoIncrement: true
-	},
-	clientName: {
-		type: Sequelize.STRING(255)
-	},
-	clientAddress: {
-		type: Sequelize.STRING(255)
-	},
-	clientCity: {
-		type: Sequelize.STRING(255)
-	},
-	clientState: {
-		type: Sequelize.STRING(50)
-	},
-	clientZip: {
-		type: Sequelize.STRING(10)
-	},
-	clientEmailAddress: {
-		type: Sequelize.STRING(80)
-	},
-	clientLiensNotes: {
-		type: Sequelize.TEXT
-	},
-	clientPhoneNotes: {
-		type: Sequelize.TEXT
-	},
-	clientHealthInsuranceNotes: {
-		type: Sequelize.TEXT
-	},      
-	clientWorkersCompCarrierNotes: {
-		type: Sequelize.TEXT
-	},   
-	clientTypeOfCaseNotes: {
-		type: Sequelize.TEXT
-	},           
-	clientDOANotes: {
-		type: Sequelize.TEXT
-	},                  
-	clientLastPaymentDateNotes: {
-		type: Sequelize.TEXT
-	},      
-	client60LCodeNotes: {
-		type: Sequelize.TEXT
-	},              
-	clientCaseStyleAndAttorneysNotes: {
-		type: Sequelize.TEXT
-	},
-	clientDisabilityInsuranceNotes: {
-		type: Sequelize.TEXT
-	},  
-	clientNoFaultCarrierNotes: {
-		type: Sequelize.TEXT
-	},       
-	clientFaultCarrierNotes: {
-		type: Sequelize.TEXT
-	},
+    clientId: {
+        type: Sequelize.INTEGER,
+        primaryKey: true,
+        autoIncrement: true
+    },
+    clientName: {
+        type: Sequelize.STRING(255)
+    },
+    clientAddress: {
+        type: Sequelize.STRING(255)
+    },
+    clientCity: {
+        type: Sequelize.STRING(255)
+    },
+    clientState: {
+        type: Sequelize.STRING(50)
+    },
+    clientZip: {
+        type: Sequelize.STRING(10)
+    },
+    clientEmailAddress: {
+        type: Sequelize.STRING(80)
+    },
+    clientLiensNotes: {
+        type: Sequelize.TEXT
+    },
+    clientPhoneNotes: {
+        type: Sequelize.TEXT
+    },
+    clientHealthInsuranceNotes: {
+        type: Sequelize.TEXT
+    },      
+    clientWorkersCompCarrierNotes: {
+        type: Sequelize.TEXT
+    },   
+    clientTypeOfCaseNotes: {
+        type: Sequelize.TEXT
+    },           
+    clientDOANotes: {
+        type: Sequelize.TEXT
+    },                  
+    clientLastPaymentDateNotes: {
+        type: Sequelize.TEXT
+    },      
+    client60LCodeNotes: {
+        type: Sequelize.TEXT
+    },              
+    clientCaseStyleAndAttorneysNotes: {
+        type: Sequelize.TEXT
+    },
+    clientDisabilityInsuranceNotes: {
+        type: Sequelize.TEXT
+    },  
+    clientNoFaultCarrierNotes: {
+        type: Sequelize.TEXT
+    },       
+    clientFaultCarrierNotes: {
+        type: Sequelize.TEXT
+    },
     clientDocumentationRoot: {
         type: Sequelize.TEXT
     }
 },
 {
-	freezeTableName: true
-	
-});
+    freezeTableName: true
+    
+})
+*/
+
 
 
 // ***************************************************************
@@ -192,6 +198,10 @@ db.notes = sequelize.define('notes', {
 	
 });
 
+db.notes.belongsTo(db.user, { foreignKey: 'creatorID' });
+//db.user.hasMany(db.notes);
+
+
 // ***************************************************************
 // ****************  noteVersions  *******************
 // ***************************************************************
@@ -286,7 +296,7 @@ db.recentClientViews = sequelize.define('recentClientViews', {
 	freezeTableName: true
 });
 
-db.recentClientViews.belongsTo(db.clientTable, { foreignKey: 'recentViewee' });
+db.recentClientViews.belongsTo(db.client, { foreignKey: 'recentViewee' });
 db.recentClientViews.belongsTo(db.user, { foreignKey: 'recentViewer' });
 
 
@@ -312,6 +322,7 @@ db.clientToNote = sequelize.define('clientToNote', {
 	freezeTableName: true
 });
 
+//db.clientToNote.belongsTo()
 
 
 module.exports = db;
