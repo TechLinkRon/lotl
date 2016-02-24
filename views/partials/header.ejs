@@ -1,4 +1,4 @@
-<nav class="navbar navbar-default" role="navigation">
+<nav class="navbar navbar-lotl" role="navigation">
     <div class="container-fluid">
 
         <div class="navbar-header">
@@ -9,9 +9,16 @@
         </div>
 
         <ul class="nav navbar-nav">
-            <li><a href="/">Home</a></li>
-            <li><a href="/about">About</a></li>
+
+            <li>
+                <a class="panel-title" style="text-align: right;">
+                    User: <%= userInfo.firstName %> <%= userInfo.lastName %>
+                </a>
+            </li>
         </ul>
+        
+        
+        
       
     </div>
 </nav>

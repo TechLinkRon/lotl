@@ -1,0 +1,85 @@
+<!-- views/login.ejs -->
+
+<!DOCTYPE html>
+
+<html>
+
+<head>
+    <title>Node Authentication</title>
+    <% include ../partials/headSection %>
+</head>
+
+<body>
+    <div class="container">
+
+        <div class="col-sm-6 col-sm-offset-3">
+
+            <h1><span class="fa fa-sign-in"></span> Login</h1>
+
+            <!-- show any messages that come back with authentication -->
+            <% if (message.length > 0) { %>
+                <div class="alert alert-danger">
+                    <%= message %>
+                </div>
+                <% } %>
+
+                    <!-- LOGIN FORM -->
+                    <div>
+                        <div class="form-group">
+                            <label>Email</label>
+                            <input type="text" class="form-control" id="emailField">
+                        </div>
+                        <div class="form-group">
+                            <label>Password</label>
+                            <input type="password" class="form-control" id="passwordField">
+                        </div>
+
+                        <button type="submit" class="btn btn-warning btn-lg" id="loginButton">Login</button>
+                    </div>
+
+                    <hr>
+                    <!-- 
+    <p>Need an account? <a href="/signup">Signup</a></p>
+    <p>Or go <a href="/">home</a>.</p>
+ -->
+        </div>
+
+    </div>
+    <script src="/public/js/jquery-ui.min.js"></script>
+
+    <script type="text/javascript">
+        $('#loginButton').on('click', function () {
+
+            var email = $('#emailField').val();
+            var password = $('#passwordField').val();
+
+            var loginSubmission = {
+                email: email,
+                password: password
+            };
+
+
+            $.ajax({
+                type: 'POST', // define the type of HTTP verb we want to use
+                url: '/users/login', // the url where we want to POST
+                data: JSON.stringify(loginSubmission), // our data object
+                contentType: 'application/json; charset=UTF-8',
+                dataType: 'json', // what type of data do we expect back from the server
+                encode: true,
+                success: function (result, responseCode, response) {
+                    console.log(response.getResponseHeader('Auth'));
+                    
+                    window.location.href = "/home?Auth=" + response.getResponseHeader('Auth');
+
+                }
+            });
+
+        });
+    </script>
+</body>
+
+
+
+
+
+</html>

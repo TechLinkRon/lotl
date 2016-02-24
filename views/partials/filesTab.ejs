@@ -1,4 +1,4 @@
- <div role="tabpanel" class="tab-pane fade" id="files">
+ <div role="tabpanel" class="tab-pane fade" id="files" style="height: 800px;">
 
     <style>
 
@@ -31,13 +31,13 @@
                     'data': {
                         'url': function (node) {
                             
-                            var nodeID = '';
+                            var nodeId = '';
                             if(node.id === '#') {
-                                nodeID = 'root';
+                                nodeId = 'root';
                             } else {
-                                nodeID = node.id;
+                                nodeId = node.id;
                             }
-                            return '/api/fs/' + nodeID + '/' + currentClientViewID;
+                            return '/api/fs/' + nodeId + '/' + currentClientViewId;
                         },
                         'dataType': 'json' // needed only if you do not supply JSON headers
                     },
@@ -54,10 +54,10 @@
 
 				var parentNode = data.instance.get_node(data.node.parent);
 				var siblingNodes = parentNode.children;
-				siblingNodes.forEach(function(siblingNodeID) {
+				siblingNodes.forEach(function(siblingNodeId) {
 				
-					if(siblingNodeID !== data.node.id) {
-					var siblingNode = data.instance.get_node(siblingNodeID);
+					if(siblingNodeId !== data.node.id) {
+					var siblingNode = data.instance.get_node(siblingNodeId);
 					data.instance.close_node(siblingNode); 
 					};
 				});

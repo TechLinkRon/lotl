@@ -43,9 +43,9 @@ function createBrowserObject(reqPath) {
 }
 
 
-exports.createJsonFromFileSystem = function (targetFolder, clientID, callMeBack) {
+exports.createJsonFromFileSystem = function (targetFolder, clientId, callMeBack) {
 
-    lotl_api.getClientInfo(clientID, function (err, clientInfo) {
+    lotl_api.getClientInfo(clientId, function (err, clientInfo) {
 
         var theClientRoot = clientInfo.clientDocumentationRoot;
         

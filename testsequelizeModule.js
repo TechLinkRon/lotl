@@ -17,9 +17,9 @@ function testFunction() {
 	
 	db.listMembership.findAll(
 		{
-			where: { messageListID: 2 },
+			where: { messageListId: 2 },
 			order: [
-				['noteID', 'DESC']
+				['noteId', 'DESC']
 			],
 			limit: 10
 		}
@@ -29,21 +29,21 @@ function testFunction() {
 
 			idsOfInterest = [];
 			for (i = 0; i < listMembershipRows.length; i++) {
-				idsOfInterest.push(listMembershipRows[i].noteID);
+				idsOfInterest.push(listMembershipRows[i].noteId);
 			}
 
 			db.noteVersions.findAll(
 				{
-					where: { noteID: {$in: idsOfInterest} },
+					where: { noteId: {$in: idsOfInterest} },
 					order: [
-						['noteID', 'DESC']
+						['noteId', 'DESC']
 					]
 				}
 			).then(function (noteVersionsRows) {
 
 				for (i = 0 ; i < noteVersionsRows.length; i++) {
 					console.log('---------------------------------------------------------');
-					console.log(noteVersionsRows[i].noteID);
+					console.log(noteVersionsRows[i].noteId);
 					console.log('---------------------------------------------------------');
 					console.log(noteVersionsRows[i].noteVersionsText);
 				}
@@ -61,10 +61,10 @@ function testOldfunction() {
 	
 	db.notes.create(
 		{
-			noteID: 112,
+			noteId: 112,
 			noteText: 'What???????????',
-			noteTypeID: 0,
-			creatorID: 0
+			noteTypeId: 0,
+			creatorId: 0
 		}
 	).then(
 		function () {
@@ -80,44 +80,44 @@ function testOldfunction() {
 
 		
 function saveNewOrChangedNote(theMessage,
-								userID,
-								noteID) {
+								userId,
+								noteId) {
 
 	desiredMessage = theMessage;
-	desiredCreatorID = userID;
-	desiredNoteID = noteID;
+	desiredCreatorId = userId;
+	desiredNoteId = noteId;
 	
 	db.notes.create(
 			{
-				noteTypeID: 0,
-				creatorID: userID,
-				noteID: noteID
+				noteTypeId: 0,
+				creatorId: userId,
+				noteId: noteId
 			}
 	).then(
 		function (newNote) {
-			createNewVersion(newNote.noteID, theMessage)
+			createNewVersion(newNote.noteId, theMessage)
 		},
 		function (errorObject) {
 			console.log('You cant insert that shit.');
 
-			createNewVersion(desiredNoteID, desiredMessage); 
+			createNewVersion(desiredNoteId, desiredMessage); 
 		}
 	);
 };
 
-function createNewVersion(newNoteID, theMessage) {
+function createNewVersion(newNoteId, theMessage) {
 
 	var dateStr = moment().format();
 	
 	db.noteVersions.create(
 		{
-			noteID: newNoteID,
+			noteId: newNoteId,
 			noteVersionsText: theMessage,
 			noteVersionsUpdateTimeStamp: dateStr
 		}
 	).then(function (newNoteVersion) {
-		console.log('Version ID: ' + newNoteVersion.noteVersionsID);
-		console.log('Message ID: ' + newNoteID);
+		console.log('Version ID: ' + newNoteVersion.noteVersionsId);
+		console.log('Message ID: ' + newNoteId);
 
 	});
 };
@@ -126,18 +126,18 @@ function createNewVersion(newNoteID, theMessage) {
 
 //var theMessage = req.body.message;
 //var dateStr = moment().format();
-//var newNoteID = 0;
+//var newNoteId = 0;
 //var db = new sqlite3.Database(dbConnectionString);
 
 //db.serialize(function () {
-//	var theSQL = "INSERT INTO notes (noteText, itemUpdateTimeStamp, creatorID) VALUES (?, ?, ?)";
+//	var theSQL = "INSERT INTO notes (noteText, itemUpdateTimeStamp, creatorId) VALUES (?, ?, ?)";
 //	//var stmt = db.prepare(theSQL);
 //	db.run(theSQL, theMessage, dateStr, 0, function (err) {
-//		console.log(this.lastID);
+//		console.log(this.lastId);
 		
-//		newNoteID = this.lastID;
-//		console.log(newNoteID);
-//		var retJson = { message: newNoteID };
+//		newNoteId = this.lastId;
+//		console.log(newNoteId);
+//		var retJson = { message: newNoteId };
 //		res.statusCode = 200;
 //		res.json(retJson);
 //		res.end();

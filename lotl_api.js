@@ -7,27 +7,27 @@ var db = require('./db.js');
 
 exports.newClientMessageList = function (req, res) {
 
-	var newListClientID = req.body.listClientID;
-  var newListCreatorID = req.body.listCreatorID;
+	var newListClientId = req.body.listClientId;
+  var newListCreatorId = req.body.listCreatorId;
   var newListName = req.body.listName;
-  var newListID = 0;
+  var newListId = 0;
 	var db = new sqlite3.Database(dbConnectionString);
   
   db.serialize(function() {
-    var theSQL = "INSERT INTO clientMessageLists (clientID, creatorUserID, listName) VALUES ($cID, $cUID, $lN)";
+    var theSQL = "INSERT INTO clientMessageLists (clientId, creatorUserId, listName) VALUES ($cId, $cUID, $lN)";
 
     db.run(theSQL,
       {
-          $cID: newListClientID,
-          $cUID: newListCreatorID,
+          $cId: newListClientId,
+          $cUID: newListCreatorId,
           $lN: newListName
       },
       function (err) {
-        console.log(this.lastID);
+        console.log(this.lastId);
   
-        newListID = this.lastID;
-        console.log(newListID);
-        var retJson = { newListID: newListID };
+        newListId = this.lastId;
+        console.log(newListId);
+        var retJson = { newListId: newListId };
         res.statusCode = 200;
         res.json(retJson);
         res.end();
@@ -39,27 +39,27 @@ exports.newClientMessageList = function (req, res) {
 
 exports.newUserMessageList = function (req, res) {
 
-	var newListOwnerID = req.body.listOwnerID;
-  var newListCreatorID = req.body.listCreatorID;
+	var newListOwnerId = req.body.listOwnerId;
+  var newListCreatorId = req.body.listCreatorId;
   var newListName = req.body.listName;
-  var newListID = 0;
+  var newListId = 0;
   var db = new sqlite3.Database(dbConnectionString);
   
   db.serialize(function() {
-    var theSQL = "INSERT INTO userMessageLists (ownerUserID, creatorUserID, listName) VALUES ($oUID, $cUID, $lN)";
+    var theSQL = "INSERT INTO userMessageLists (ownerUserId, creatorUserId, listName) VALUES ($oUID, $cUID, $lN)";
 
     db.run(theSQL,
       {
-          $oUID: newListOwnerID,
-          $cUID: newListCreatorID,
+          $oUID: newListOwnerId,
+          $cUID: newListCreatorId,
           $lN: newListName
       },
       function (err) {
-        console.log(this.lastID);
+        console.log(this.lastId);
   
-        newListID = this.lastID;
-        console.log(newListID);
-        var retJson = { newListID: newListID };
+        newListId = this.lastId;
+        console.log(newListId);
+        var retJson = { newListId: newListId };
         res.statusCode = 200;
         res.json(retJson);
         res.end();
@@ -118,74 +118,74 @@ exports.saveField = function (req, res) {
 
 exports.saveMessage = function (req, res) {
 	
-	var desiredCreatorID = req.user;
+	var desiredCreatorId = req.user.userId;
 	var desiredMessage = req.body.message;
-	var desiredNoteID = req.body.messageID;
-	var desiredClientID = req.body.clientID;
+	var desiredNoteId = req.body.messageId;
+	var desiredClientId = req.body.clientId;
 	
-	if (desiredNoteID === 0) { desiredNoteID = null; }
-	desiredClientID = desiredClientID || 0;
+	if (desiredNoteId === 0) { desiredNoteId = null; }
+	desiredClientId = desiredClientId || 0;
 	
 	db.notes.create(
 		{
-			noteTypeID: 0,
-			creatorID: desiredCreatorID,
-			noteID: desiredNoteID
+			noteTypeId: 0,
+			creatorId: desiredCreatorId,
+			noteId: desiredNoteId
 		}
 	).then(
 		function (newNote) {
 			// now that we've created a new note, create the first version of that note
 			// and associate it with this client
-			assignNoteToClient(newNote.noteID, desiredClientID, createNewVersion(newNote.noteID, desiredMessage, res));
+			assignNoteToClient(newNote.noteId, desiredClientId, createNewVersion(newNote.noteId, desiredMessage, res));
 		},
 		function (errorObject) {
-			// the noteID already exists, so just create new version
+			// the noteId already exists, so just create new version
 			
-			createNewVersion(desiredNoteID, desiredMessage, res);
+			createNewVersion(desiredNoteId, desiredMessage, res);
 		}
 	);
 };
 
-function assignNoteToClient(noteID, clientID, callMeBack) {
+function assignNoteToClient(noteId, clientId, callMeBack) {
 
 	db.clientToNote.create(
 		{
-			clientID: clientID,
-			noteID: noteID
+			clientId: clientId,
+			noteId: noteId
 		}
 	).then(callMeBack);
 	
 	
 }
 
-function createNewVersion(newNoteID, theMessage, res) {
+function createNewVersion(newNoteId, theMessage, res) {
 	
 	var dateStr = moment().format();
 	
 	db.noteVersions.create(
 		{
-			noteID: newNoteID,
+			noteId: newNoteId,
 			noteVersionsText: theMessage,
 			noteVersionsUpdateTimeStamp: dateStr
 		}
 	).then(function (newNoteVersion) {
-		console.log('Version ID: ' + newNoteVersion.noteVersionsID);
-		console.log('Message ID: ' + newNoteID);
+		console.log('Version ID: ' + newNoteVersion.noteVersionsId);
+		console.log('Message ID: ' + newNoteId);
 		
 		// put current version id and text into notes table as well
 		db.notes.update(
 			{
-				currentVersionID: newNoteVersion.noteVersionsID,
+				currentVersionId: newNoteVersion.noteVersionsId,
 				currentVersionText: theMessage
 					},
 							{
 				where: {
-					noteID : newNoteID
+					noteId : newNoteId
 				}
 			}
 			).then(function () {
 				
-				var retJson = { message: newNoteID };
+				var retJson = { message: newNoteId };
 				res.statusCode = 200;
 				res.json(retJson);
 				res.end();
@@ -193,12 +193,12 @@ function createNewVersion(newNoteID, theMessage, res) {
 	});
 };
 
-exports.addNewRecentClientView = function (userID, clientID, callMeBack) {
+exports.addNewRecentClientView = function (userId, clientId, callMeBack) {
 	
 	db.recentClientViews.upsert(
 		{
-			recentViewer: userID,
-			recentViewee: clientID
+			recentViewer: userId,
+			recentViewee: clientId
 		}
 	).then(function () {
 		callMeBack();
@@ -226,18 +226,18 @@ exports.getAllMessages = function (req, res) {
 	});
 }
 
-exports.getMessageByID = function (req, res) {
+exports.getMessageById = function (req, res) {
 
-	var theMessageID = req.body.messageID;
+	var theMessageId = req.body.messageId;
   var db = new sqlite3.Database(dbConnectionString);
   
   db.serialize(function() {
 
-    var theSQL = "SELECT * FROM notes WHERE noteID = $LIID;";
+    var theSQL = "SELECT * FROM notes WHERE noteId = $LIID;";
 
     db.all(theSQL,
       {
-          $LIID: theMessageID
+          $LIID: theMessageId
       },
       function (err, rows) {
   
@@ -273,7 +273,7 @@ exports.clientSearch = function (req, res) {
 				matchingClientNames.push(
 					{
 						clientName: clientMatches[i].clientName,
-						clientID: clientMatches[i].clientId
+						clientId: clientMatches[i].clientId
 					});
 			}
 		}
@@ -285,10 +285,10 @@ exports.clientSearch = function (req, res) {
 }
 
 
-exports.checkClientID = function (req, res) {
-	var clientID = req.params.id;
+exports.checkClientId = function (req, res) {
+	var clientId = req.params.id;
 	
-	doesClientExist(clientID, 
+	doesClientExist(clientId, 
                     function (err, clientExists) {
 		
 		console.log("Answer is: ", clientExists);
@@ -303,45 +303,49 @@ exports.checkClientID = function (req, res) {
 };
 
 
-exports.getRecentClientViewsAPI = function (userID, callMeBack2) {
+exports.getRecentClientViewsAPI = function (userId, callMeBack2) {
 	
 	var theClientViews = [];
+    
+    userId = userId || 0;
 	console.log('Calling findAll()...');
 	
-	db.recentClientViews.findAll(
-		{
-			attributes: ['recentViewer' , 'recentViewee'],
-			include: [
-				{
-					model: db.client,
-					attributes: ['clientName'],
-					as: 'client'
-				}
-			],
-			where: { recentViewer: userID },
-			order: [
-				['updatedAt', 'DESC']
-			]
 
-		}
-	).then(function (recentClientViews) {
-		
-		if (recentClientViews) {
-			for (i = 0; i < recentClientViews.length; i++) {
-				
-				var answerObject = {
-					clientName: recentClientViews[i].client.clientName,
-					clientID: recentClientViews[i].recentViewee
-				};
-				
-				console.log(answerObject);
-				theClientViews.push(answerObject);
-			}
-		}
-		callMeBack2(null, theClientViews);
+        db.recentClientViews.findAll(
+            {
+                attributes: ['recentViewer' , 'recentViewee'],
+                include: [
+                    {
+                        model: db.client,
+                        attributes: ['clientName'],
+                        as: 'client'
+                    }
+                ],
+                where: { recentViewer: userId },
+                order: [
+                    ['updatedAt', 'DESC']
+                ]
 
-	});
-				
+            }
+        ).then(function (recentClientViews) {
+
+            if (recentClientViews) {
+                for (i = 0; i < recentClientViews.length; i++) {
+
+                    var answerObject = {
+                        clientName: recentClientViews[i].client.clientName,
+                        clientId: recentClientViews[i].recentViewee
+                    };
+
+                    console.log(answerObject);
+                    theClientViews.push(answerObject);
+                }
+            }
+            callMeBack2(null, theClientViews);
+
+        });
+    
+	
 
 };
 
@@ -367,18 +371,18 @@ exports.getLastTenMessagesForClient = function (targetClientId, callMeBack) {
 	
 	db.clientMessageLists.findOne(
 		{
-			where: { clientID: targetClientId }
+			where: { clientId: targetClientId }
 		}
 	).then(function (clientMessageListRow) {
 		
 		if (clientMessageListRow) {
-			console.log('>>>>>>>>>>>>>>>> need messsageListID to be ' + clientMessageListRow);
+			console.log('>>>>>>>>>>>>>>>> need messsageListId to be ' + clientMessageListRow);
 			
 			db.listMembership.findAll(
 				{
-					where: { messageListID: clientMessageListRow.clientMessageListID },
+					where: { messageListId: clientMessageListRow.clientMessageListId },
 					order: [
-						['noteID', 'DESC']
+						['noteId', 'DESC']
 					],
 					limit: 10
 				}
@@ -388,14 +392,14 @@ exports.getLastTenMessagesForClient = function (targetClientId, callMeBack) {
 					
 					idsOfInterest = [];
 					for (i = 0; i < listMembershipRows.length; i++) {
-						idsOfInterest.push(listMembershipRows[i].noteID);
+						idsOfInterest.push(listMembershipRows[i].noteId);
 					}
 					
 					db.noteVersions.findAll(
 						{
-							where: { noteID: { $in: idsOfInterest } },
+							where: { noteId: { $in: idsOfInterest } },
 							order: [
-								['noteID', 'DESC']
+								['noteId', 'DESC']
 							]
 						}
 					).then(function (noteVersionsRows) {
@@ -408,7 +412,7 @@ exports.getLastTenMessagesForClient = function (targetClientId, callMeBack) {
 
 					//for (i = 0 ; i < noteVersionsRows.length; i++) {
 					//	console.log('---------------------------------------------------------');
-					//	console.log(noteVersionsRows[i].noteID);
+					//	console.log(noteVersionsRows[i].noteId);
 					//	console.log('---------------------------------------------------------');
 					//	console.log(noteVersionsRows[i].noteVersionsText);
 					//}
@@ -427,9 +431,9 @@ exports.getRangeOfMessagesForClient = function (targetClientId, firstMessage, me
 		
 			db.clientToNote.findAll(
 				{
-					where: { clientID: targetClientId },
+					where: { clientId: targetClientId },
 					order: [
-						['noteID', 'DESC']
+						['noteId', 'DESC']
 					]
 				}
 			).then(function (notes) {
@@ -447,13 +451,13 @@ exports.getRangeOfMessagesForClient = function (targetClientId, firstMessage, me
 					
 					idsOfInterest = [];
 					for (i = start; i < finish; i++) {
-						idsOfInterest.push(notes[i].noteID);
+						idsOfInterest.push(notes[i].noteId);
 					}
 					db.notes.findAll(
 						{
-							where: { noteID: { $in: idsOfInterest } },
+							where: { noteId: { $in: idsOfInterest } },
 							order: [
-								['noteID', 'DESC']
+								['noteId', 'DESC']
 							]
 						}
 			).then(function (notesWeWant) {
@@ -495,7 +499,7 @@ exports.HoldgetRangeOfMessagesForClient = function (targetClientId, firstMessage
 	
 	db.clientMessageLists.findOne(
 		{
-			where: { clientID: targetClientId }
+			where: { clientId: targetClientId }
 		}
 	).then(function (clientMessageListRow) {
 		
@@ -503,9 +507,9 @@ exports.HoldgetRangeOfMessagesForClient = function (targetClientId, firstMessage
 			
 			db.listMembership.findAll(
 				{
-					where: { messageListID: clientMessageListRow.clientMessageListID },
+					where: { messageListId: clientMessageListRow.clientMessageListId },
 					order: [
-						['noteID', 'DESC']
+						['noteId', 'DESC']
 					]
 				}
 			).then(function (listMembershipRows) {
@@ -523,13 +527,13 @@ exports.HoldgetRangeOfMessagesForClient = function (targetClientId, firstMessage
 					
 					idsOfInterest = [];
 					for (i = start; i < finish; i++) {
-						idsOfInterest.push(listMembershipRows[i].noteID);
+						idsOfInterest.push(listMembershipRows[i].noteId);
 					}
 					db.noteVersions.findAll(
 						{
-							where: { noteID: { $in: idsOfInterest } },
+							where: { noteId: { $in: idsOfInterest } },
 							order: [
-								['noteID', 'DESC']
+								['noteId', 'DESC']
 							]
 						}
 					).then(function (noteVersionsRows) {
@@ -601,24 +605,24 @@ exports.getClientInfo = function (targetClientId, callMeBack) {
 
 
 
-function doesClientExist(testClientID, callMeBack) {
+function doesClientExist(testClientId, callMeBack) {
 
   async.waterfall([
     function(callback) {
-      callback(null, testClientID);
+      callback(null, testClientId);
     },
-    function (clientID, callback){
+    function (clientId, callback){
       var db = new sqlite3.Database(dbConnectionString);
-      var theSQL = "SELECT * FROM client WHERE clientID = $cID;";
+      var theSQL = "SELECT * FROM client WHERE clientId = $cId;";
     
       db.all(theSQL,
           {
-              $cID: clientID
+              $cId: clientId
           },
           function (err, rows) {
             
             var theAnswer = {
-                clientIDQuery: testClientID,
+                clientIdQuery: testClientId,
                 doesHeExist: false,
                 clientName: null
             };
@@ -648,18 +652,18 @@ function doesClientExist(testClientID, callMeBack) {
 	
 //	var theMessage = req.body.message;
 //	var dateStr = moment().format();
-//	var newNoteID = 0;
+//	var newNoteId = 0;
 //	var db = new sqlite3.Database(dbConnectionString);
 	
 //	db.serialize(function () {
-//		var theSQL = "INSERT INTO notes (noteText, itemUpdateTimeStamp, creatorID) VALUES (?, ?, ?)";
+//		var theSQL = "INSERT INTO notes (noteText, itemUpdateTimeStamp, creatorId) VALUES (?, ?, ?)";
 //		//var stmt = db.prepare(theSQL);
 //		db.run(theSQL, theMessage, dateStr, 0, function (err) {
-//			console.log(this.lastID);
+//			console.log(this.lastId);
 			
-//			newNoteID = this.lastID;
-//			console.log(newNoteID);
-//			var retJson = { message: newNoteID };
+//			newNoteId = this.lastId;
+//			console.log(newNoteId);
+//			var retJson = { message: newNoteId };
 //			res.statusCode = 200;
 //			res.json(retJson);
 //			res.end();
@@ -670,7 +674,7 @@ function doesClientExist(testClientID, callMeBack) {
 
 //}
 
-//function getClientViewsAPI(testClientID) {
+//function getClientViewsAPI(testClientId) {
 	
 //	var recentClientViews = [];
 	
@@ -678,9 +682,9 @@ function doesClientExist(testClientID, callMeBack) {
 //		[
 //			function (callback) {
 //				var db = new sqlite3.Database(dbConnectionString);
-//				var theSQL = "SELECT recentClientViews.recentViewee, clientTable.clientName FROM recentClientViews, clientTable WHERE recentClientViews.recentViewer = $cID AND recentClientViews.recentViewee = client.clientID;";
+//				var theSQL = "SELECT recentClientViews.recentViewee, clientTable.clientName FROM recentClientViews, clientTable WHERE recentClientViews.recentViewer = $cId AND recentClientViews.recentViewee = client.clientId;";
 				
-//				db.all(theSQL, { $cID: testClientID	},
+//				db.all(theSQL, { $cId: testClientId	},
 //					function (err, rows) {
 					
 //						if (rows.length == 0) {
@@ -692,7 +696,7 @@ function doesClientExist(testClientID, callMeBack) {
 							
 //								var answerObject = {
 //									clientName: rows[counter].clientName,
-//									recentVieweeID: rows[counter].recentViewee
+//									recentVieweeId: rows[counter].recentViewee
 //								};
 							
 //								recentClientViews.push(answerObject);
@@ -718,9 +722,9 @@ function doesClientExist(testClientID, callMeBack) {
 //}
 
 //exports.getRecentClientViews = function (req, res) {
-//	var clientID = req.params.id;
+//	var clientId = req.params.id;
 	
-//	getClientViews(clientID, function (err, clientViews) {
+//	getClientViews(clientId, function (err, clientViews) {
 		
 //		console.log("Answer is: ", clientViews);
 		

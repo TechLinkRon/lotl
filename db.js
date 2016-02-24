@@ -1,7 +1,7 @@
 var Sequelize = require('sequelize');
 var sequelize = new Sequelize(undefined, undefined, undefined, {
 	'dialect': 'sqlite',
-	'storage': __dirname + '/db/testdb.sqlite'
+	'storage': __dirname + '/db/lotl.sqlite'
 });
 
 var db = {};
@@ -96,7 +96,7 @@ db.clientTable = sequelize.define('clientTable', {
 // ***************************************************************
 /*
 db.userTable = sequelize.define('userTable', {
-	userID: {
+	userId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -129,15 +129,15 @@ db.userTable = sequelize.define('userTable', {
 // ***************************************************************
 
 db.clientMessageLists = sequelize.define('clientMessageLists', {
-	clientMessageListID: {
+	clientMessageListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	clientID: {
+	clientId: {
 		type: Sequelize.INTEGER
 	},
-	creatorUserID: {
+	creatorUserId: {
 		type: Sequelize.INTEGER
 	},
 	listName: {
@@ -155,11 +155,11 @@ db.clientMessageLists = sequelize.define('clientMessageLists', {
 // ***************************************************************
 
 db.listMembership = sequelize.define('listMembership', {
-	messageListID: {
+	messageListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: 'compositeKey1'
 	},
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER,
 		primaryKey: 'compositeKey1'
 	}
@@ -175,21 +175,21 @@ db.listMembership = sequelize.define('listMembership', {
 // ***************************************************************
 
 db.notes = sequelize.define('notes', {
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	creatorID: {
+	creatorId: {
 		type: Sequelize.INTEGER
 	},
-	noteTypeID: {
+	noteTypeId: {
 		type: Sequelize.INTEGER
 	},
 	currentVersionText: {
 		type: Sequelize.TEXT
 	},
-	currentVersionID: {
+	currentVersionId: {
 		type: Sequelize.INTEGER
 	}
 },
@@ -198,7 +198,7 @@ db.notes = sequelize.define('notes', {
 	
 });
 
-db.notes.belongsTo(db.user, { foreignKey: 'creatorID' });
+db.notes.belongsTo(db.user, { foreignKey: 'creatorId' });
 //db.user.hasMany(db.notes);
 
 
@@ -207,12 +207,12 @@ db.notes.belongsTo(db.user, { foreignKey: 'creatorID' });
 // ***************************************************************
 
 db.noteVersions = sequelize.define('noteVersions', {
-	noteVersionsID: {
+	noteVersionsId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER
 	},
 	noteVersionsText: {
@@ -229,12 +229,12 @@ db.noteVersions = sequelize.define('noteVersions', {
 // ***************************************************************
 
 db.taskList = sequelize.define('taskList', {
-	taskListID: {
+	taskListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	ownerID: {
+	ownerId: {
 		type: Sequelize.INTEGER
 	},
 	taskListText: {
@@ -252,15 +252,15 @@ db.taskList = sequelize.define('taskList', {
 // ***************************************************************
 
 db.userMessageLists = sequelize.define('userMessageLists', {
-	userMessageListID: {
+	userMessageListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	ownerUserID: {
+	ownerUserId: {
 		type: Sequelize.INTEGER
 	},
-	creatorUserID: {
+	creatorUserId: {
 		type: Sequelize.INTEGER
 	},
 	listName: {
@@ -278,7 +278,7 @@ db.userMessageLists = sequelize.define('userMessageLists', {
 // ***************************************************************
 
 db.recentClientViews = sequelize.define('recentClientViews', {
-	recentClientViewsID: {
+	recentClientViewsId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -306,15 +306,15 @@ db.recentClientViews.belongsTo(db.user, { foreignKey: 'recentViewer' });
 // ***************************************************************
 
 db.clientToNote = sequelize.define('clientToNote', {
-	clientToNoteID: {
+	clientToNoteId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	clientID: {
+	clientId: {
 		type: Sequelize.INTEGER
 	},
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER
 	}
 },

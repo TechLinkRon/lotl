@@ -159,8 +159,8 @@
     <script type="text/javascript">
 
         // ID of client current active
-        var currentClientViewID = <%= clientInfo.clientId %>;
-        var userID = <%= userID %>;
+        var currentClientViewId = <%= clientInfo.clientId %>;
+        var userId = <%= userId %>;
 
         $('#myTabs li a').click(function (e) {
             e.preventDefault()
@@ -213,7 +213,7 @@
 
         clientSearchTypeahead.on('typeahead:select', function (ev, suggestion) {
 
-            window.location.href = '/home/' + userID + '/' + suggestion.clientID;
+            window.location.href = '/home/' + userId + '/' + suggestion.clientId;
 
         });
 

@@ -6,6 +6,13 @@ module.exports = function (db) {
       requireAuthentication: function (req, res, next) {
           
           var token = req.get('Auth') || '';
+          if (token === ''){
+              if(req.param('Auth')){
+                  token = req.param('Auth');
+              }
+          }
+          
+          req.authToken = token;
           
           if(token){
               console.log('Looking for user...');
@@ -27,10 +34,12 @@ module.exports = function (db) {
                   next();
               }).catch(function() {
                   res.status(401).send();
-              });     
+                  //res.redirect('/login');
+              });      
           
           } else {
               res.status(401).send();
+              //res.redirect('/login');
           }
       }  
         

@@ -34,7 +34,7 @@ var client = sequelize.define('client', {
 });
 
 var userTable = sequelize.define('userTable', {
-	userID: {
+	userId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -62,15 +62,15 @@ var userTable = sequelize.define('userTable', {
 });
 
 var clientMessageLists = sequelize.define('clientMessageLists', {
-	cliectMessageListID: {
+	cliectMessageListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	clientID: {
+	clientId: {
 		type: Sequelize.INTEGER
 	},
-	creatorUserID: {
+	creatorUserId: {
 		type: Sequelize.INTEGER
 	},
 	listName: {
@@ -84,15 +84,15 @@ var clientMessageLists = sequelize.define('clientMessageLists', {
 });
 
 var listMembership = sequelize.define('listMembership', {
-	listMembershipID: {
+	listMembershipId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	messageListID: {
+	messageListId: {
 		type: Sequelize.INTEGER
 	},
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER
 	}
 },
@@ -103,12 +103,12 @@ var listMembership = sequelize.define('listMembership', {
 });
 
 var notes = sequelize.define('notes', {
-	noteID: {
+	noteId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	creatorID: {
+	creatorId: {
 		type: Sequelize.INTEGER
 	},
 	noteText: {
@@ -126,7 +126,7 @@ var notes = sequelize.define('notes', {
 
 /*
 var recentClientViews = sequelize.define('recentClientViews', {
-	recentClientViewsID: {
+	recentClientViewsId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -147,12 +147,12 @@ var recentClientViews = sequelize.define('recentClientViews', {
  */
 
 var taskList = sequelize.define('taskList', {
-	taskListID: {
+	taskListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	ownerID: {
+	ownerId: {
 		type: Sequelize.INTEGER
 	},
 	taskListText: {
@@ -166,15 +166,15 @@ var taskList = sequelize.define('taskList', {
 });
 
 var userMessageLists = sequelize.define('userMessageLists', {
-	userMessageListID: {
+	userMessageListId: {
 		type: Sequelize.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
 	},
-	ownerUserID: {
+	ownerUserId: {
 		type: Sequelize.INTEGER
 	},
-	creatorUserID: {
+	creatorUserId: {
 		type: Sequelize.INTEGER
 	},
 	listName: {

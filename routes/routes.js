@@ -6,6 +6,12 @@ exports.index = function (req, res) {
 		res.render('pages/index', {});
 };
 
+// login page 
+exports.login = function (req, res) {
+	
+		res.render('pages/login', { message: [] });
+};
+
 exports.newhome = function (req, res) {
 	exports.homer(req, res, "newhome");
 };
@@ -16,40 +22,42 @@ exports.home = function (req, res) {
 
 exports.homer = function (req, res, pageToReturn) {
 	
-	var userID = 0;
-	var clientID = null;
-	
+	var userId = null;
+	var clientId = 1;
+	var authToken = req.authToken;
+    
 	pageToReturn = pageToReturn || "home";	
 	
-	if (req.params.currentUserID) {
-		userID = req.params.currentUserID;
+	if (req.user) {
+		userId = req.user.userId;
 	}
-	else {
-		userID = req.user;
+	//else {
+	//	userId = req.user;
+	//}
+	
+	if (req.params.currentClientId) {
+		clientId = req.params.currentClientId;
 	}
-	
-	if (req.params.currentClientID) {
-		clientID = req.params.currentClientID;
-	}
-	else {
-		clientID = 0;
-	}
+	//else {
+	//	clientId = 0;
+	//}
 	
 	
 	
-	lotl_api.getClientInfo(clientID, function (err, clientInfo) {
-		lotl_api.getUserInfo(userID, function (err, userInfo) {
-			lotl_api.addNewRecentClientView(userID, clientID, function () {
-				lotl_api.getRecentClientViewsAPI(userID, function (err, userRecentClients) {
-					lotl_api.getLastTenMessagesForClient(clientID, function (err, clientRecentMessages) {
+	lotl_api.getClientInfo(clientId, function (err, clientInfo) {
+		lotl_api.getUserInfo(userId, function (err, userInfo) {
+			lotl_api.addNewRecentClientView(userId, clientId, function () {
+				lotl_api.getRecentClientViewsAPI(userId, function (err, userRecentClients) {
+					lotl_api.getLastTenMessagesForClient(clientId, function (err, clientRecentMessages) {
 					
 						res.statusCode = 200;
 						res.render('pages/' + pageToReturn, {
-							userID: userID,
+							userId: userId,
 							userRecentClients: userRecentClients,
 							userInfo: userInfo,
 							clientInfo: clientInfo,
-							clientRecentMessages: clientRecentMessages
+							clientRecentMessages: clientRecentMessages,
+                            authToken: authToken
 						});
 					});
 				});
@@ -61,31 +69,31 @@ exports.homer = function (req, res, pageToReturn) {
 
 exports.home2 = function (req, res) {
 	
-	var userID = 0;
-	var clientID = null;
+	var userId = 0;
+	var clientId = null;
 	
-	if (req.params.currentUserID) {
-		userID = req.params.currentUserID;
+	if (req.params.currentUserId) {
+		userId = req.params.currentUserId;
 	}
 	else {
-		userID = req.user;
+		userId = req.user;
 	}
 	
-	if (req.params.currentClientID) {
-		clientID = req.params.currentClientID;
+	if (req.params.currentClientId) {
+		clientId = req.params.currentClientId;
 	}
 	else {
-		clientID = 0;
+		clientId = 0;
 	}
 	
 	
 	
-	lotl_api.getClientInfo(clientID, function (err, clientInfo) {
-		lotl_api.getUserInfo(userID, function (err, userInfo) {
+	lotl_api.getClientInfo(clientId, function (err, clientInfo) {
+		lotl_api.getUserInfo(userId, function (err, userInfo) {
 						
 						res.statusCode = 200;
 						res.render('pages/home2', {
-							userID: userID,
+							userId: userId,
 							userInfo: userInfo,
 							clientInfo: clientInfo,
 						});
@@ -96,15 +104,15 @@ exports.home2 = function (req, res) {
 
 exports.get_chronos = function (req, res) {
 	
-	var clientID = req.params.clientID || 0;
+	var clientId = req.params.clientId || 0;
 	var firstChrono = req.params.firstChrono || 0;
 	var chronoCount = req.params.chronoCount || 10;
 	
-	lotl_api.getRangeOfMessagesForClient(clientID, firstChrono, chronoCount, function (err, clientRecentMessages) {
+	lotl_api.getRangeOfMessagesForClient(clientId, firstChrono, chronoCount, function (err, clientRecentMessages) {
 						
 		res.statusCode = 200;
 		res.render('partials/chronos', {
-			clientID: clientID,
+			clientId: clientId,
 			clientRecentMessages: clientRecentMessages
 		});
 	});
@@ -142,10 +150,10 @@ exports.save_message = function (req, res) { lotl_api.saveMessage(req, res); };
 exports.save_field = function (req, res) { lotl_api.saveField(req, res); };
 
 // Retrieve message item with given ID
-exports.get_message_by_id = function (req, res) { lotl_api.getMessageByID; };
+exports.get_message_by_id = function (req, res) { lotl_api.getMessageById; };
 
 // Check if particular client ID exists
-exports.does_client_exist = function (req, res) { lotl_api.checkClientID(req, res); };
+exports.does_client_exist = function (req, res) { lotl_api.checkClientId(req, res); };
 
 // Get list of recent clients viewed by a user
 exports.get_recents_list = function (req, res) { lotl_api.getRecentClientViews(req, res); };

@@ -62,7 +62,7 @@
 
         // Unique ID for all iterations of this message. Will be assigned a non-zero value
         // by the server when this message is saved the first time.
-        var currentMessageID = 0;
+        var currentMessageId = 0;
 
         var saveIfChanged = function () {
             if (theEditor.checkDirty()) {
@@ -86,7 +86,7 @@
 
                 var theJson = {
                     message: data,
-                    messageID: currentMessageID
+                    messageId: currentMessageId
                 };
 
                 $.ajax({
@@ -97,7 +97,7 @@
                     dataType: 'json', // what type of data do we expect back from the server
                     encode: true,
                     success: function (res) {
-                        currentMessageID = res.message;
+                        currentMessageId = res.message;
                         var ret = $.parseJSON(JSON.stringify(res));
 
                         // hide 'saving' animation

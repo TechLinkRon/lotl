@@ -26,7 +26,7 @@ app.set('view engine', 'ejs');
 //==========================================================================================================================
 // SESSION CODE
 //==========================================================================================================================
-app.use(session({
+/*app.use(session({
 	cookieName: 'session',
 	secret: 'random_string_goes_here',
 	duration: 30 * 60 * 1000,
@@ -58,7 +58,7 @@ app.use(function (req, res, next) {
 
 		next();
 	}
-});
+});*/
 
 //==========================================================================================================================
 // END SESSION CODE
@@ -73,14 +73,18 @@ var jsonParser = bodyParser.json(
 
 var theFileSystemRoot = "c:\\inetpub\\wwwroot\\gabe-before-express\\";
 
-app.get('/', routes.index);
+app.get('/index', routes.index);
+app.get('/login', routes.login);
 app.get('/notesHarness', routes.notesHarness);
 app.get('/index2', routes.index2);
-app.get('/home', routes.home);
-app.get('/home/:currentUserID/:currentClientID', routes.home);
-app.get('/newhome/:currentUserID/:currentClientID', routes.newhome);
-app.get('/home2/:currentUserID/:currentClientID', routes.home2);
-app.get('/home/:currentUserID', routes.home);
+
+app.get('/home', middleware.requireAuthentication, routes.home);
+app.get('/home/:currentClientId', middleware.requireAuthentication, routes.home);
+//app.get('/home/:currentUserId', routes.home);
+
+app.get('/newhome/:currentUserId/:currentClientId', routes.newhome);
+app.get('/home2/:currentUserId/:currentClientId', routes.home2);
+
 
 app.get('/clientsearch/:searchTerm', routes.clientSearch);
 
@@ -123,16 +127,17 @@ function exists(filename, cb) {
 //==========================================================================================================================
 
 // return file/folder tree as JSON
-app.get('/api/fs/:nodeID/:clientID', jsonParser, function (req, res) {
+app.get('/api/fs/:nodeId/:clientId', jsonParser, function (req, res) {
   
 
-    fs_apis.createJsonFromFileSystem('\\', req.params.clientID, function (theAnswer) {
+    fs_apis.createJsonFromFileSystem('\\', req.params.clientId, function (theAnswer) {
 
         res.statusCode = 200;
         res.json(theAnswer);
         res.end();
     });
 });
+
 
 app.post('/users', jsonParser, function (req, res) {
     var body = _.pick(req.body, 'email', 'password');
@@ -192,7 +197,9 @@ app.post('/api/new_client_message_list', jsonParser, routes.new_client_message_l
 app.post('/api/new_user_message_list', jsonParser, routes.new_user_message_list );
 
 // Process saving HTML from CKEditor for client notes
-app.post('/api/save_message', jsonParser, routes.save_message);
+app.post('/api/save_message', middleware.requireAuthentication,
+                                jsonParser,
+                                routes.save_message);
 
 // Process saving HTML from CKEditors for client db fields
 app.post('/api/save_field', jsonParser, routes.save_field);
@@ -209,8 +216,8 @@ app.post('/api/get_recents_list/:id', jsonParser, routes.get_recents_list);
 app.get('/api/get_recents_list', routes.get_recents_list_html);
 
 // Get partial list of messages from chrono
-//app.post('/api/get_chronos/:clientID/:firstChrono/:lastChrono', routes.get_chronos);
-app.get('/api/get_chronos/:clientID/:firstChrono/:chronoCount', middleware.requireAuthentication, routes.get_chronos);
+//app.post('/api/get_chronos/:clientId/:firstChrono/:lastChrono', routes.get_chronos);
+app.get('/api/get_chronos/:clientId/:firstChrono/:chronoCount', middleware.requireAuthentication, routes.get_chronos);
 
 
 //==========================================================================================================================

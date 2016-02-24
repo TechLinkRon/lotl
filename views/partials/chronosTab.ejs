@@ -1,4 +1,4 @@
-﻿                <div role="tabpanel" class="tab-pane fade" id="chrono">
+                <div role="tabpanel" class="tab-pane fade" id="chrono" style="height: 800px;">
 
                         <!-- Big CKEditor for new message -->
                         <div class="row">
@@ -16,7 +16,7 @@
                             </div>
                         </div>
                         <!-- Previous messages -->
-                        <div class="row" style="margin-top: 15px; height: 400px; overflow-y: scroll;">
+                        <div class="row" style="margin-top: 15px;">
                             <div class="col-sm-12" id="chrono_container">
                                 <div id="chrono_chunk1">
                                 </div>
@@ -43,11 +43,11 @@
  
         $( '#loadMessagesButton' ).on('click', function() {
 
-            //$(currentDiv).load('/api/get_chronos/' + currentClientViewID +'/' + firstMessage + '/' + chunkSize);
+            //$(currentDiv).load('/api/get_chronos/' + currentClientViewId +'/' + firstMessage + '/' + chunkSize);
 
             $.ajax({
                 type: 'GET', // define the type of HTTP verb we want to use
-                url: '/api/get_chronos/' + currentClientViewID + '/' + firstMessage + '/' + chunkSize, 
+                url: '/api/get_chronos/' + currentClientViewId + '/' + firstMessage + '/' + chunkSize + '?Auth=' + authToken, 
                 contentType: 'application/json; charset=UTF-8',
                 dataType: 'html', // what type of data do we expect back from the server
                 encode: true,

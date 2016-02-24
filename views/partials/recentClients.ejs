@@ -6,7 +6,7 @@
 
     <% if(userRecentClients.length != 0) {
             userRecentClients.forEach(function(row) {   %>
-                <a href="/home/<%= userID %>/<%= row.clientID %>" class="list-group-item list-group-item-success text-center" style="font-weight: bold;"> <%= row.clientName %>  </a>
+                <a href="/home/<%= row.clientId + '?Auth=' + authToken %>" class="list-group-item list-group-item-success text-center" style="font-weight: bold;"> <%= row.clientName %>  </a>
             <% }); 
         }
         else

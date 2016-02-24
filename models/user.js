@@ -12,7 +12,7 @@ module.exports = function (sequelize, DataTypes) {
     
 var user = sequelize.define('user', {
     
-	userID: {
+	userId: {
 		type: DataTypes.INTEGER,
 		primaryKey: true,
 		autoIncrement: true
@@ -68,7 +68,7 @@ var user = sequelize.define('user', {
         toPublicJSON: function () {
             var json = this.toJSON();
             
-            return _.pick(json, 'userID', 'createdAt', 'updatedAt', 'email');
+            return _.pick(json, 'userId', 'createdAt', 'updatedAt', 'email');
             
         },
         generateToken: function (type) {
@@ -77,7 +77,7 @@ var user = sequelize.define('user', {
             }
             
             try {
-                var stringData = JSON.stringify({id: this.get('userID'), type: type});
+                var stringData = JSON.stringify({id: this.get('userId'), type: type});
                 var encryptedData = cryptojs.AES.encrypt(stringData, 'abc123&^%').toString();
                 
                 var token = jwt.sign({
@@ -128,6 +128,7 @@ var user = sequelize.define('user', {
                     user.findById(tokenData.id).then(function (user) {
                         
                         if(user) {
+                            //user.userId = tokenData.id;
                             return resolve(user);
                             
                         } else {

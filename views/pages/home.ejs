@@ -2,7 +2,7 @@
 <html>
 <head>
     <title></title>
-    <script src="/public/js/jquery.js"></script>
+
     <% include ../partials/headSection %>
 </head>
 <body style="background-color: #B1C8DC;">
@@ -46,7 +46,6 @@
         <div class="col-sm-6">
             <div class="panel panel-primary">
                 <div class="panel-heading">
-                    <h3 class="panel-title" style="text-align: right;">User: <%= userInfo.firstName %> <%= userInfo.lastName %></h3>
                 </div>
             </div>
         </div>
@@ -61,9 +60,9 @@
                 <li role="presentation"><a href="#settings" aria-controls="settings" role="tab" data-toggle="tab">Settings</a></li>
             </ul>
 
-            <div class="tab-content">
+            <div class="tab-content" style="margin: 10px;">
 
-                <div role="tabpanel" class="tab-pane fade in active" id="client-info">
+                <div role="tabpanel" class="tab-pane fade in active" id="client-info" style="height: 800px;">
                     <div class="col-sm-6">
                         <div class="panel panel-info">
                             <div class="panel-heading">
@@ -188,8 +187,9 @@
     <script type="text/javascript">
 
         // ID of client current active
-        var currentClientViewID = <%= clientInfo.clientId %>;
-        var userID = <%= userID %>;
+        var currentClientViewId = <%= clientInfo.clientId %>;
+        var userId = <%= userId %>;
+        var authToken = '<%= authToken %>';
 
 		// Have we polpulated the file tree yet?
 		var treePopulated = false;
@@ -245,7 +245,7 @@
 
         clientSearchTypeahead.on('typeahead:select', function (ev, suggestion) {
 
-            window.location.href = '/home/' + userID + '/' + suggestion.clientID;
+            window.location.href = '/home/' + suggestion.clientId + '?Auth=' + authToken;
 
         });
 
